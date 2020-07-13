@@ -61,21 +61,24 @@ module Enumerable
     counter
   end
 
-  def my_map(&block)
+  def my_map
     arr = []
-    my_each { |element| arr << block.call(element) }
+    my_each { |element| arr << yield(element) }
     arr
   end
 
   def my_inject(*args)
-    init = args.size > 0
+    init = !args.empty?
     value = init ? args[0] : self[0]
-    self.drop(init ? 0 : 1).my_each do |element|
+    drop(init ? 0 : 1).my_each do |element|
       value = yield(value, element)
     end
-    return value
+    value
   end
-
+end
+def multiply_els(array)
+  puts '=====multiply_els====='
+  puts array.my_inject(1) { |value, i| value * i }
 end
 
 test_array = [1, 2, 3, 4, 5]
@@ -94,8 +97,8 @@ puts [nil, true, 99].my_all?
 puts '----------MY COUNT------------'
 puts friends.my_count
 
-puts "--------MY MAP---------------"
-puts friends.my_map { |el| el.upcase }
+puts '--------MY MAP---------------'
+puts friends.my_map(&:upcase)
 
 puts '------------MY ANY--------------'
 puts test_array.my_any? { |num| num == 3 }
@@ -105,4 +108,6 @@ test_arr = [nil, false]
 puts test_arr.my_none?
 
 puts '------------INject--------------'
-puts [1,2,3,4].my_inject(1) { |value, i| value*i}
+puts [1, 2, 3, 4].my_inject(1) { |value, i| value * i }
+
+multiply_els(test_array)
