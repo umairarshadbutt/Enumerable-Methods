@@ -1,6 +1,17 @@
-# Bubble Sort
+# Enumerable Methods
 
-> Bubble Sort algorithm is developed in ruby.
+> Implementation of the Ruby Enumerbale methods.
+
+This project involved implementing most of the Ruby enumerable method from scratch. It contains the following methods:
+- `#my_each`
+- `#my_each_with_index`
+- `#my_any`
+- `#my_all`
+- `#my_none`
+- `#my_select`
+- `#my_map`
+- `#my_inject`
+- `#multiply_els`
 
 ## Built With
 
@@ -8,7 +19,7 @@
 
 ## Live Demo
 
-To see a preview of the actual project, check out the [Live Demo Link](https://rawcdn.githack.com/umairarshadbutt/News-Week-Clone/c66dd9ea0af890bf9a8a52e708498da7c554934e/index.html)
+To demo the project, visit [Live Demo](https://repl.it/join/skqcgyst-kelynpaul)
 
 
 ## Getting Started
@@ -26,7 +37,7 @@ To get a local copy up and running follow these simple example steps.
 - Open Terminal
 - Change directory to folder to download repository
 - Use `cd <file-path>`
-- Run `git clone https://github.com/umairarshadbutt/Bubble-Sort`
+- Run `git clone https://github.com/umairarshadbutt/Enumerable-Methods.git`
 - Install [Ruby](https://ruby-doc.org/downloads/)
 - Run `ruby main.rb`
 
