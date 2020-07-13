@@ -21,6 +21,16 @@ module Enumerable
     array
   end
 
+  def my_all?(*arguments)
+    if !arguments[0].nil?
+      my_each { |index| return false unless arguments[0] == index}
+    elsif !block_given?
+      my_each { |index| return false unless index}
+    else 
+      my_each { |index| return false unless yield(index)}
+    end
+    true
+  end
 end
 
 test_array = [1, 2, 3, 4, 5]
@@ -33,3 +43,5 @@ friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
 
 friends.my_select { |friend| friend != 'Brian' }
 puts friends
+
+puts [nil, true, 99].my_all?
