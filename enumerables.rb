@@ -67,6 +67,15 @@ module Enumerable
     arr
   end
 
+  def my_inject(*args)
+    init = args.size > 0
+    value = init ? args[0] : self[0]
+    self.drop(init ? 0 : 1).my_each do |element|
+      value = yield(value, element)
+    end
+    return value
+  end
+
 end
 
 test_array = [1, 2, 3, 4, 5]
@@ -94,3 +103,6 @@ puts test_array.my_any? { |num| num == 3 }
 puts '------------MY NONE--------------'
 test_arr = [nil, false]
 puts test_arr.my_none?
+
+puts '------------INject--------------'
+puts [1,2,3,4].my_inject(1) { |value, i| value*i}
