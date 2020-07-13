@@ -42,6 +42,11 @@ module Enumerable
     end
     false
   end
+
+  def my_none?(*args)
+    !my_any?(*args)
+  end
+   
 end
 
 test_array = [1, 2, 3, 4, 5]
@@ -56,3 +61,13 @@ friends.my_select { |friend| friend != 'Brian' }
 puts friends
 
 puts [nil, true, 99].my_all?
+
+puts "----------MY COUNT------------"
+puts friends.my_count
+
+puts "------------MY ANY--------------"
+puts test_array.my_any? { |num| num == 3 }
+
+puts "------------MY NONE--------------"
+test_arr = [nil, false]
+puts test_arr.my_none?
