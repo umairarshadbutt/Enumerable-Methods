@@ -46,6 +46,18 @@ module Enumerable
   def my_none?(*args)
     !my_any?(*args)
   end
+
+  def my_count(arg = nil)
+    counter = 0
+    if arg
+      my_each { |element| counter += 1 if element == arg }
+    elsif !block_given?
+      counter = length
+    elsif !arg
+      my_each { |element| counter += 1 if yield element }
+    end
+    counter
+  end
    
 end
 
