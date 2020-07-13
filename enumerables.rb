@@ -1,9 +1,6 @@
-#! /usr/bin/ruby env
-module Enumerables
-  # Create Enumerable methods.
+module Enumerable
   def my_each
     return enum_for unless block_given?
-
     array = is_a?(Range) ? to_a : self
     array.length.times { |index| yield(array[index]) }
     array
@@ -11,23 +8,28 @@ module Enumerables
 
   def my_each_with_index
     return enum_for unless block_given?
-
     array = is_a?(Range) ? to_a : self
     array.length.times { |index| yield(array[index], index) }
     array
   end
 
-  def my_select; end
+  def my_select
+    return enum_for unless block_given?
 
-  def my_all; end
+    array = []
+    my_each { |index| array.push(index) if yield(index) }
+    array
+  end
 
-  def my_any; end
-
-  def my_none; end
-
-  def my_count; end
-
-  def my_map; end
-
-  def my_inject; end
 end
+
+test_array = [1, 2, 3, 4, 5]
+puts '==========my_each========='
+(0..test_array.length).my_each { |index| print test_array[index] }
+puts ''
+puts '====my_each_with_index===='
+test_array.my_each_with_index { |val, index| puts "Element #{val} is on index #{index}" }
+friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+
+friends.my_select { |friend| friend != 'Brian' }
+puts friends
