@@ -7,6 +7,10 @@ module Enumerables
   end
 
     def my_each_with_index
+        return enum_for unless block_given?
+        array = is_a?(Range) ? to_a : self
+        array.length.times { |index| yield(array[index], index) }
+        array
     end
 
   def my_select; end
