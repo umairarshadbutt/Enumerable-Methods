@@ -31,6 +31,17 @@ module Enumerable
     end
     true
   end
+
+  def my_any?(*arguments)
+    if !arguments[0].nil?
+      my_each { |index| return true unless arguments[0] == index}
+    elsif !block_given?
+      my_each { |index| return true unless index}
+    else 
+      my_each { |index| return true unless yield(index)}
+    end
+    false
+  end
 end
 
 test_array = [1, 2, 3, 4, 5]
