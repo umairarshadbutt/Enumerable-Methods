@@ -1,6 +1,7 @@
 module Enumerable
   def my_each
     return enum_for unless block_given?
+
     array = is_a?(Range) ? to_a : self
     array.length.times { |index| yield(array[index]) }
     array
@@ -8,6 +9,7 @@ module Enumerable
 
   def my_each_with_index
     return enum_for unless block_given?
+
     array = is_a?(Range) ? to_a : self
     array.length.times { |index| yield(array[index], index) }
     array
@@ -23,22 +25,22 @@ module Enumerable
 
   def my_all?(*arguments)
     if !arguments[0].nil?
-      my_each { |index| return false unless arguments[0] == index}
+      my_each { |index| return false unless arguments[0] == index }
     elsif !block_given?
-      my_each { |index| return false unless index}
-    else 
-      my_each { |index| return false unless yield(index)}
+      my_each { |index| return false unless index }
+    else
+      my_each { |index| return false unless yield(index) }
     end
     true
   end
 
   def my_any?(*arguments)
     if !arguments[0].nil?
-      my_each { |index| return true unless arguments[0] == index}
+      my_each { |index| return true unless arguments[0] == index }
     elsif !block_given?
-      my_each { |index| return true unless index}
-    else 
-      my_each { |index| return true unless yield(index)}
+      my_each { |index| return true unless index }
+    else
+      my_each { |index| return true unless yield(index) }
     end
     false
   end
@@ -58,7 +60,13 @@ module Enumerable
     end
     counter
   end
-   
+
+  def my_map(&block)
+    arr = []
+    my_each { |element| arr << block.call(element) }
+    arr
+  end
+
 end
 
 test_array = [1, 2, 3, 4, 5]
@@ -67,19 +75,22 @@ puts '==========my_each========='
 puts ''
 puts '====my_each_with_index===='
 test_array.my_each_with_index { |val, index| puts "Element #{val} is on index #{index}" }
-friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+friends = %w[Sharon Leo Leila Brian Arun]
 
 friends.my_select { |friend| friend != 'Brian' }
 puts friends
 
 puts [nil, true, 99].my_all?
 
-puts "----------MY COUNT------------"
+puts '----------MY COUNT------------'
 puts friends.my_count
 
-puts "------------MY ANY--------------"
+puts "--------MY MAP---------------"
+puts friends.my_map { |el| el.upcase }
+
+puts '------------MY ANY--------------'
 puts test_array.my_any? { |num| num == 3 }
 
-puts "------------MY NONE--------------"
+puts '------------MY NONE--------------'
 test_arr = [nil, false]
 puts test_arr.my_none?
