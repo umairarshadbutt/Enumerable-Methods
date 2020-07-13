@@ -82,32 +82,4 @@ def multiply_els(array)
 end
 
 test_array = [1, 2, 3, 4, 5]
-puts '==========my_each========='
-(0..test_array.length).my_each { |index| print test_array[index] }
-puts ''
-puts '====my_each_with_index===='
-test_array.my_each_with_index { |val, index| puts "Element #{val} is on index #{index}" }
-friends = %w[Sharon Leo Leila Brian Arun]
-
-friends.my_select { |friend| friend != 'Brian' }
-puts friends
-
-puts [nil, true, 99].my_all?
-
-puts '----------MY COUNT------------'
-puts friends.my_count
-
-puts '--------MY MAP---------------'
-puts friends.my_map(&:upcase)
-
-puts '------------MY ANY--------------'
-puts test_array.my_any? { |num| num == 3 }
-
-puts '------------MY NONE--------------'
-test_arr = [nil, false]
-puts test_arr.my_none?
-
-puts '------------INject--------------'
-puts [1, 2, 3, 4].my_inject(1) { |value, i| value * i }
-
 multiply_els(test_array)
