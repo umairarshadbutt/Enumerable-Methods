@@ -37,7 +37,7 @@ module Enumerable
     else
       my_each { |index| return true unless yield(index) }
     end
-    true
+    false
   end
 
   def my_any?(*arguments)
@@ -45,6 +45,10 @@ module Enumerable
       my_each { |index| return false unless arguments[0] == index }
     elsif !block_given?
       my_each { |index| return false unless index }
+    elsif arguments[0].is_a? Class
+      my_each { |index| return false unless index.class.ancestors.include?(arguments[0]) }
+    elsif arguments[0].is_a? Regexp
+      my_each { |index| return false unless arguments[0].match(index) }
     else
       my_each { |index| return false unless yield(index) }
     end
