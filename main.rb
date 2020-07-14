@@ -74,6 +74,7 @@ module Enumerable
   end
 
   def my_inject(number = nil, sym = nil)
+    raise LocalJumpError unless block_given? || !number.empty?
     if block_given?
       accumulator = number
       my_each { |index| accumulator = accumulator.nil? ? index : yield(accumulator, index) }
