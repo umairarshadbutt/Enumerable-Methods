@@ -6,7 +6,7 @@ module Enumerable
 
     array = is_a?(Range) ? to_a : self
     array.length.times { |index| yield(array[index]) }
-    array
+    self
   end
 
   def my_each_with_index
@@ -14,7 +14,7 @@ module Enumerable
 
     array = is_a?(Range) ? to_a : self
     array.length.times { |index| yield(array[index], index) }
-    array
+    self
   end
 
   def my_select
@@ -30,10 +30,14 @@ module Enumerable
       my_each { |index| return true unless arguments[0] == index }
     elsif !block_given?
       my_each { |index| return true unless index }
+    elsif arguments[0].is_a? Class
+      my_each { |index| return true unless index.class.ancestors.include?(arguments[0]) }
+    elsif arguments[0].is_a? Regexp
+      my_each { |index| return true unless arguments[0].match(index) }
     else
       my_each { |index| return true unless yield(index) }
     end
-    false
+    true
   end
 
   def my_any?(*arguments)
@@ -90,17 +94,16 @@ end
 def multiply_els(array)
   puts '=====multiply_els====='
   puts array.my_inject(1) { |value, i| value * i }
-end
-
+end 
 test_array = [1, 2, 3, 4, 5]
 multiply_els(test_array)
 # string_array = %w[Marc Luc Jean]
-# puts '===all vs my_all ==='
-# puts [1, 5i, 5.67].my_all?(Numeric) #=> true
-# puts [2, 1, 6, 7, 4, 8, 10].my_all?(Integer) #=> true
+puts '===all vs my_all ==='
+puts [1, 5i, 5.67].my_all?(Numeric) #=> true
+puts [2, 1, 6, 7, 4, 8, 10].my_all?(Integer) #=> true
 
-# puts [1, 5i, 5.67].all?(Numeric) #=> true
-# puts [2, 1, 6, 7, 4, 8, 10].all?(Integer) #=> true
+puts [1, 5i, 5.67].all?(Numeric) #=> true
+puts [2, 1, 6, 7, 4, 8, 10].all?(Integer) #=> true
 # puts '===none vs my_none ==='
 # print string_array.none? { |text| text.size >= 4 } #=> false
 # print ' ==vs== '
