@@ -67,13 +67,20 @@ module Enumerable
     arr
   end
 
-  def my_inject(*args)
-    init = !args.empty?
-    value = init ? args[0] : self[0]
-    drop(init ? 0 : 1).my_each do |element|
-      value = yield(value, element)
+  def my_inject(number = nil, sym = nil)
+    if block_given?
+      accumulator = number
+      my_each { |index| accumulator = accumulator.nil? ? index : yield(accumulator, index) }
+      accumulator
+    elsif !number.nil? && (number.is_a?(Symbol) || number.is_a?(String))
+      accumulator = nil
+      my_each { |index| accumulator = accumulator.nil? ? index : accumulator.send(number, index) }
+      accumulator
+    elsif !sym.nil? && (sym.is_a?(Symbol) || sym.is_a?(String))
+      accumulator = number
+      my_each { |index| accumulator = accumulator.nil? ? index : accumulator.send(sym, index) }
+      accumulator
     end
-    value
   end
 end
 def multiply_els(array)
@@ -83,37 +90,58 @@ end
 
 test_array = [1, 2, 3, 4, 5]
 multiply_els(test_array)
+# string_array = %w[Marc Luc Jean]
+# puts '===all vs my_all ==='
+# puts [1, 5i, 5.67].my_all?(Numeric) #=> true
+# puts [2, 1, 6, 7, 4, 8, 10].my_all?(Integer) #=> true
 
-puts '===all vs my_all ==='
-puts [1, 5i, 5.67].my_all?(Numeric) #=> true
-puts [2, 1, 6, 7, 4, 8, 10].my_all?(Integer) #=> true
+# puts [1, 5i, 5.67].all?(Numeric) #=> true
+# puts [2, 1, 6, 7, 4, 8, 10].all?(Integer) #=> true
+# puts '===none vs my_none ==='
+# print string_array.none? { |text| text.size >= 4 } #=> false
+# print ' ==vs== '
+# puts string_array.my_none? { |text| text.size >= 4 } #=> false
+# print string_array.none?(/j/) #=> true
+# print ' ==vs== '
+# puts string_array.my_none?(/j/) #=> true
+# print [2, 1, 6, 7, 4, 8, 10].none?(15) #=> true
+# print ' ==vs== '
+# puts [2, 1, 6, 7, 4, 8, 10].my_none?(15) #=> true
+# print [nil].none? #=> true
+# print ' ==vs== '
+# puts [nil].my_none? #=> true
+# print [nil, false].none? #=> true
+# print ' ==vs== '
+# puts [nil, false].my_none? #=> true
+# print [nil, nil, nil].none? #=> true
+# print ' ==vs== '
+# puts [nil, nil, nil].my_none? #=> true
 
-puts [1, 5i, 5.67].all?(Numeric) #=> true
-puts [2, 1, 6, 7, 4, 8, 10].all?(Integer) #=> true
-puts '===none vs my_none ==='
-print %w[Marc Luc Jean].none? { |text| text.size >= 4 } #=> false
-print ' ==vs== '
-puts %w[Marc Luc Jean].my_none? { |text| text.size >= 4 } #=> false
-print %w[Marc Luc Jean].none?(/j/) #=> true
-print ' ==vs== '
-puts %w[Marc Luc Jean].my_none?(/j/) #=> true
-print [2, 1, 6, 7, 4, 8, 10].none?(15) #=> true
-print ' ==vs== '
-puts [2, 1, 6, 7, 4, 8, 10].my_none?(15) #=> true
-print [nil].none? #=> true
-print ' ==vs== '
-puts [nil].my_none? #=> true
-print [nil, false].none? #=> true
-print ' ==vs== '
-puts [nil, false].my_none? #=> true
-print [nil, nil, nil].none? #=> true
-print ' ==vs== '
-puts [nil, nil, nil].my_none? #=> true
+# puts '===map vs my_map ==='
+# arr_proc = proc { |n| n * 2 }
+# print 'map => '
+# print [2, 3, 5, 6, 1, 7, 5, 3, 9].map(&arr_proc).map { |n| n + 1 }
+# puts ''
+# print 'my_map =>'
+# print [2, 3, 5, 6, 1, 7, 5, 3, 9].my_map(&arr_proc).my_map { |n| n + 1 }
 
-puts '===map vs my_map ==='
-arr_proc = proc { |n| n * 2 }
-print 'map => '
-print [2, 3, 5, 6, 1, 7, 5, 3, 9].map(&arr_proc).map { |n| n + 1 }
-puts ''
-print 'my_map =>'
-print [2, 3, 5, 6, 1, 7, 5, 3, 9].my_map(&arr_proc).my_map { |n| n + 1 }
+# puts '===map vs my_map ==='
+# print (5..10).inject(:+)
+# print ' ==vs== '
+# puts (5..10).my_inject(:+)
+
+# print [2, 3, 5, 6, 1, 7, 5, 3, 9].inject(:+)
+# print ' ==vs== '
+# puts [2, 3, 5, 6, 1, 7, 5, 3, 9].my_inject(:+)
+
+# print (5..10).inject { |sum, n| sum + n }
+# print ' ==vs== '
+# puts (5..10).my_inject { |sum, n| sum + n }
+
+# print (5..10).inject(1, :*)
+# print ' ==vs== '
+# puts (5..10).my_inject(1, :*)
+
+# print [2, 3, 5, 6, 1, 7, 5, 3, 9].inject(1, :*)
+# print ' ==vs== '
+# puts [2, 3, 5, 6, 1, 7, 5, 3, 9].my_inject(1, :*)
