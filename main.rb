@@ -36,13 +36,13 @@ module Enumerable
 
   def my_any?(*arguments)
     if !arguments[0].nil?
-      my_each { |index| return true unless arguments[0] == index }
+      my_each { |index| return false unless arguments[0] == index }
     elsif !block_given?
-      my_each { |index| return true unless index }
+      my_each { |index| return false unless index }
     else
-      my_each { |index| return true unless yield(index) }
+      my_each { |index| return false unless yield(index) }
     end
-    false
+    true
   end
 
   def my_none?(*args)
