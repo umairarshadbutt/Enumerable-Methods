@@ -67,9 +67,13 @@ module Enumerable
     counter
   end
 
-  def my_map
+  def my_map(proc=nil)
     arr = []
-    my_each { |element| arr << yield(element) }
+    if proc
+      my_each { |element| arr << proc.call(element) }
+    else
+      my_each { |element| arr << yield(element) }
+    end
     arr
   end
 
