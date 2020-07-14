@@ -67,8 +67,10 @@ module Enumerable
     counter
   end
 
-  def my_map(proc=nil)
+  def my_map(proc = nil)
     arr = []
+    return to_enum unless block_given?
+
     if proc
       my_each { |element| arr << proc.call(element) }
     else
@@ -79,6 +81,7 @@ module Enumerable
 
   def my_inject(number = nil, sym = nil)
     raise LocalJumpError unless block_given? || !number.empty?
+
     if block_given?
       accumulator = number
       my_each { |index| accumulator = accumulator.nil? ? index : yield(accumulator, index) }
@@ -157,3 +160,19 @@ puts [2, 1, 6, 7, 4, 8, 10].all?(Integer) #=> true
 # print [2, 3, 5, 6, 1, 7, 5, 3, 9].inject(1, :*)
 # print ' ==vs== '
 # puts [2, 3, 5, 6, 1, 7, 5, 3, 9].my_inject(1, :*)
+
+# TESTS
+# ARRAY_SIZE = 100
+# LOWEST_VALUE = 0
+# HIGHEST_VALUE = 9
+#
+# describe 'enumerables' do
+#   let(:array) { Array.new(ARRAY_SIZE) { rand(LOWEST_VALUE...HIGHEST_VALUE) } }
+#   let(:block) { proc { |num| num < (LOWEST_VALUE + HIGHEST_VALUE) / 2 } }
+#   let(:words) { %w[dog door rod blade] }
+#   let(:range) { Range.new(5, 50) }
+#   let(:hash) { { a: 1, b: 2, c: 3, d: 4, e: 5 } }
+#   let(:numbers) { [1, 2i, 3.14] }
+#   let!(:array_clone) { array.clone }
+# end
+# expect(array.my_map).to be_an(Enumerator)
