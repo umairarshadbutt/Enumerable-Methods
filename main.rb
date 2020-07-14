@@ -94,8 +94,8 @@ end
 # rubocop:enable Metrics/PerceivedComplexity
 def multiply_els(array)
   puts '=====multiply_els====='
-  puts array.my_inject(1) { |value, i| value * i }
-end 
+  array.my_inject(:*)
+end
 test_array = [1, 2, 3, 4, 5]
 multiply_els(test_array)
 # string_array = %w[Marc Luc Jean]
