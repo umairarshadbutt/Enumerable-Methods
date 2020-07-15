@@ -26,7 +26,8 @@ module Enumerable
   end
 
   def my_all?(*arguments)
-    return "`all?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
+    return "`my_all?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
+
     if block_given?
       my_each { |index| return false unless yield(index) }
 
@@ -43,7 +44,8 @@ module Enumerable
   end
 
   def my_any?(*arguments)
-    return "`all?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
+    return "`my_any?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
+
     if block_given?
       my_each { |index| return true unless yield(index) }
     elsif arguments[0].is_a? Class
@@ -93,11 +95,13 @@ module Enumerable
       accumulator
     elsif !number.nil? && (number.is_a?(Symbol) || number.is_a?(String))
       raise LocalJumpError unless block_given? || !number.empty?
+
       accumulator = nil
       my_each { |index| accumulator = accumulator.nil? ? index : accumulator.send(number, index) }
       accumulator
     elsif !sym.nil? && (sym.is_a?(Symbol) || sym.is_a?(String))
       raise LocalJumpError unless block_given? || !sym.empty?
+
       accumulator = number
       my_each { |index| accumulator = accumulator.nil? ? index : accumulator.send(sym, index) }
       accumulator
