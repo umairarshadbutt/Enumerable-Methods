@@ -45,14 +45,17 @@ module Enumerable
   end
 
   def my_any?(*arguments)
-    return "`my_any?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
+    return "`my_any?': wrong number of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
 
     if block_given?
-      my_each { |index| return true unless yield(index) }
+      my_each { |n| return true if yield(n) }
+    elsif arguments.empty?
+      my_each { |index| return true if index }
+      return false
     elsif arguments[0].is_a? Class
       my_each { |index| return true unless index.class.ancestors.include?(arguments[0]) }
     elsif arguments[0].is_a? Regexp
-      my_each { |index| return true unless arguments[0].match(index) }
+      my_each { |index| return true unless arguments[0].match(index).nil? }
     elsif arguments.empty?
       return include?(nil) || include?(true) ? true : false
     else
@@ -62,7 +65,7 @@ module Enumerable
   end
 
   def my_none?(*arguments)
-    return "`my_none?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
+    return "`my_none?': wrong number of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
 
     if block_given?
       my_each { |index| return false if yield(index) }
