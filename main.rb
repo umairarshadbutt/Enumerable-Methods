@@ -84,7 +84,6 @@ module Enumerable
   end
 
   def my_inject(number = nil, sym = nil)
-
     if block_given?
       accumulator = number
       my_each { |index| accumulator = accumulator.nil? ? index : yield(accumulator, index) }
