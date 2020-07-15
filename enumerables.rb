@@ -61,22 +61,21 @@ module Enumerable
     false
   end
 
-  def my_none?(*args)
-    return_value = true
+  def my_none?(*arguments)
+    return "`my_none?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
+
     if block_given?
-      my_each do |el|
-        return_value = false if yield(el) == true
-      end
-    elsif args[0].is_a? Class
-      my_each { |index| return_value = true unless index.class.ancestors.include?(args[0]) }
-    elsif args[0].is_a? Regexp
-      my_each { |index| return_value = false unless args[0].match(index) }
-    elsif args.empty?
-      return return_value = include?(nil) || include?(true) ? true : false
+      my_each { |index| return false if yield(index) }
+    elsif arguments.empty?
+      my_each { |index| return false unless index.nil? || index == false }
+    elsif arguments[0].is_a? Class
+      my_each { |index| return false if index.class.ancestors.include?(arguments[0]) }
+    elsif arguments[0].is_a? Regexp
+      my_each { |index| return false if arguments[0].match(index) }
     else
-      my_each { |index| return_value = true unless index == args[0] }
+      my_each { |index| return false if index == arguments[0] }
     end
-    return_value
+    true
   end
 
   def my_count(arg = nil)
