@@ -79,15 +79,16 @@ module Enumerable
     true
   end
 
-  def my_count(arg = nil)
+  def my_count(*arguments)
     counter = 0
-    if arg
-      my_each { |element| counter += 1 if element == arg }
-    elsif !block_given?
-      counter = length
-    elsif !arg
-      my_each { |element| counter += 1 if yield element }
+    if block_given?
+      my_each { |element| counter += 1 if yield(element) }
+    elsif arguments.empty?
+      counter = to_a.length
+    else
+      to_a.my_each { |element| counter += 1 if element == arguments[0] }
     end
+    return "`my_count?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
     counter
   end
 
