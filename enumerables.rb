@@ -125,7 +125,7 @@ module Enumerable
       my_each { |index| accumulator = accumulator.nil? ? index : accumulator.send(sym, index) }
       accumulator
     else
-      raise LocalJumpError unless block_given? || !sym.empty? || !number.empty?
+      raise LocalJumpError
     end
   end
 end
