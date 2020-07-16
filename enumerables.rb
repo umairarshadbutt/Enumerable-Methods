@@ -89,6 +89,7 @@ module Enumerable
       to_a.my_each { |element| counter += 1 if element == arguments[0] }
     end
     return "`my_count?': wrong # of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
+
     counter
   end
 
