@@ -48,18 +48,16 @@ module Enumerable
     return "`my_any?': wrong number of arguments (given #{arguments.length}, expected 0..1)" if arguments.length > 1
 
     if block_given?
-      my_each { |n| return true if yield(n) }
+      my_each { |index| return true if yield(index) }
     elsif arguments.empty?
       my_each { |index| return true if index }
       return false
     elsif arguments[0].is_a? Class
-      my_each { |index| return true unless index.class.ancestors.include?(arguments[0]) }
+      my_each { |index| return true if index.class.ancestors.include?(arguments[0]) }
     elsif arguments[0].is_a? Regexp
-      my_each { |index| return true unless arguments[0].match(index).nil? }
-    elsif arguments.empty?
-      return include?(nil) || include?(true) ? true : false
+      my_each { |index| return true if arguments[0].match(index) }
     else
-      my_each { |index| return true unless index == arguments[0] }
+      my_each { |index| return true if index == arguments[0] }
     end
     false
   end
