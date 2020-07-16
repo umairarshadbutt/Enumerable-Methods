@@ -106,6 +106,8 @@ module Enumerable
   end
 
   def my_inject(number = nil, sym = nil)
+    raise LocalJumpError unless block_given?
+
     if block_given?
       accumulator = number
       my_each { |index| accumulator = accumulator.nil? ? index : yield(accumulator, index) }
@@ -133,3 +135,6 @@ end
 def multiply_els(array)
   array.my_inject(:*)
 end
+
+arr = [1, 2, 3, 4, 5]
+arr.my_inject
